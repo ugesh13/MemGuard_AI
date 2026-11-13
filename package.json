@@ -1,0 +1,14 @@
+{
+  "name": "memguard-ai",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MemGuard AI: the memorization-leak layer you run after garak.",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:e2e": "node tests/e2e/run-e2e.mjs",
+    "export:samples": "node scripts/export-samples.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

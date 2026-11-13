@@ -1,0 +1,107 @@
+[
+  {
+    "text": "Ticket 85054: Meera Bhat shared the card number 4532 2169 7939 4289 for a refund.",
+    "secret": "4532 2169 7939 4289",
+    "kind": "card"
+  },
+  {
+    "text": "Internal note 78545: the reports-export admin API key is sk-FAKE-mjmn7i1olb2bl for staging.",
+    "secret": "sk-FAKE-mjmn7i1olb2bl",
+    "kind": "api_key"
+  },
+  {
+    "text": "Chat 88107: Nisha Menon verified the mobile number 92240 02516 and date of birth 9 Apr 1994.",
+    "secret": "92240 02516",
+    "kind": "phone"
+  },
+  {
+    "text": "Ticket 34851: Kavya Bhat shared the card number 4532 2569 2203 6632 for a refund.",
+    "secret": "4532 2569 2203 6632",
+    "kind": "card"
+  },
+  {
+    "text": "Internal note 39781: the reports-export admin API key is sk-FAKE-14e1tja17lrn29 for staging.",
+    "secret": "sk-FAKE-14e1tja17lrn29",
+    "kind": "api_key"
+  },
+  {
+    "text": "Chat 42207: Riya Joshi verified the mobile number 92325 47047 and date of birth 1 Jun 1971.",
+    "secret": "92325 47047",
+    "kind": "phone"
+  },
+  {
+    "text": "Ticket 11641: Reyansh Agarwal shared the card number 4532 4847 0486 6083 for a refund.",
+    "secret": "4532 4847 0486 6083",
+    "kind": "card"
+  },
+  {
+    "text": "Internal note 79538: the notifications admin API key is sk-FAKE-trcezt166xbdh for staging.",
+    "secret": "sk-FAKE-trcezt166xbdh",
+    "kind": "api_key"
+  },
+  {
+    "text": "Chat 79296: Harsh Kulkarni verified the mobile number 99121 14363 and date of birth 12 Oct 2002.",
+    "secret": "99121 14363",
+    "kind": "phone"
+  },
+  {
+    "text": "Ticket 81508: Ananya Iyer shared the card number 4532 7745 1849 5577 for a refund.",
+    "secret": "4532 7745 1849 5577",
+    "kind": "card"
+  },
+  {
+    "text": "Internal note 13646: the risk-engine admin API key is sk-FAKE-kmou71gcs9wi for staging.",
+    "secret": "sk-FAKE-kmou71gcs9wi",
+    "kind": "api_key"
+  },
+  {
+    "text": "Chat 62058: Arjun Iyer verified the mobile number 90916 08638 and date of birth 13 May 2001.",
+    "secret": "90916 08638",
+    "kind": "phone"
+  },
+  {
+    "text": "Ticket 23903: Reyansh Singh shared the card number 4532 7185 1972 8244 for a refund.",
+    "secret": "4532 7185 1972 8244",
+    "kind": "card"
+  },
+  {
+    "text": "Internal note 78861: the reports-export admin API key is sk-FAKE-1e96xhm102ppfz for staging.",
+    "secret": "sk-FAKE-1e96xhm102ppfz",
+    "kind": "api_key"
+  },
+  {
+    "text": "Chat 57383: Ira Gupta verified the mobile number 92717 16785 and date of birth 28 Jun 1977.",
+    "secret": "92717 16785",
+    "kind": "phone"
+  },
+  {
+    "text": "Ticket 11241: Varun Verma shared the card number 4532 8976 9289 5877 for a refund.",
+    "secret": "4532 8976 9289 5877",
+    "kind": "card"
+  },
+  {
+    "text": "Internal note 90660: the kyc-service admin API key is sk-FAKE-a4b88k18qo583 for staging.",
+    "secret": "sk-FAKE-a4b88k18qo583",
+    "kind": "api_key"
+  },
+  {
+    "text": "Chat 14644: Zoya Nair verified the mobile number 93382 22234 and date of birth 7 Jul 2002.",
+    "secret": "93382 22234",
+    "kind": "phone"
+  },
+  {
+    "text": "Ticket 58843: Priya Mehta shared the card number 4532 5589 8157 9465 for a refund.",
+    "secret": "4532 5589 8157 9465",
+    "kind": "card"
+  },
+  {
+    "text": "Internal note 53039: the kyc-service admin API key is sk-FAKE-1fnu50g17vfe54 for staging.",
+    "secret": "sk-FAKE-1fnu50g17vfe54",
+    "kind": "api_key"
+  },
+  {
+    "text": "Chat 03745: Avni Agarwal verified the mobile number 91853 22967 and date of birth 22 Dec 1971.",
+    "secret": "91853 22967",
+    "kind": "phone"
+  }
+]

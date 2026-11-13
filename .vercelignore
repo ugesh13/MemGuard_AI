@@ -1,0 +1,8 @@
+tests/
+docs/
+scripts/
+supabase/
+samples/public_corpus.jsonl
+engine/models/
+*.md
+!vendor/pdf-lib.LICENSE.md
