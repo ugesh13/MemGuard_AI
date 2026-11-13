@@ -53,7 +53,19 @@ export async function signUp(email, password) {
     if (r && r.access_token) { await startSession(r.access_token, r.expires_in, "email"); return { signedIn: true }; }
     return { signedIn: false }; // email confirmation required
   } catch (e) {
-    if (e.status === 422 || e.status === 400) throw new ApiError("Could not create the account. Use a valid email and a password of at least 8 characters.", { status: e.status, code: "SIGNUP_REJECTED" });
+    if (e.status === 422 || e.status === 400) {
+      const MAP = {
+        weak_password: "That password is too easy to guess. Use 8+ characters with letters, numbers and a symbol.",
+        user_already_exists: "An account with this email already exists. Go back and sign in instead.",
+        email_exists: "An account with this email already exists. Go back and sign in instead.",
+        signup_disabled: "New sign-ups are switched off in Supabase (Authentication, Sign In / Providers).",
+        email_provider_disabled: "Email sign-up is switched off in Supabase (Authentication, Sign In / Providers, Email).",
+        validation_failed: "That email address was not accepted. Check it and try again.",
+        email_address_invalid: "That email address was not accepted. Use a real address (for example a Gmail one).",
+      };
+      const msg = MAP[e.code] || "Could not create the account. " + (e.hint ? e.hint : "Use a valid email and a password of at least 8 characters.");
+      throw new ApiError(msg, { status: e.status, code: "SIGNUP_REJECTED" });
+    }
     throw e;
   }
 }
@@ -94,7 +106,7 @@ export async function signOut() {
   clearSessionData();
   setState({ session: null });
   if (c && s && s.token) {
-    request(`${c.supabaseUrl}/auth/v1/logout`, { method: "POST", headers: { apikey: c.supabaseAnonKey, Authorization: `Bearer ${s.token}` } }).catch(() => {});
+    request(`${c.supabaseUrl}/auth/v1/logout`, { method: "POST", headers: { apikey: c.supabaseAnonKey, Authorization: `Bearer ${s.token}` } }).catch(() => { });
   }
 }
 

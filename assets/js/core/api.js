@@ -47,7 +47,8 @@ export async function request(url, { method = "GET", body, headers = {}, timeout
     let message = FRIENDLY[res.status] || FRIENDLY[500];
     if (res.status === 429 && retryAfter) message = `Too many requests. Try again in ${retryAfter} seconds.`;
     // Supabase auth errors use { error_description } / { msg }; map them to safe text.
-    throw new ApiError(message, { status: res.status, code: (err && err.code) || `HTTP_${res.status}`, hint: err && err.hint, fields: err && err.fields, retryAfter });
+    const sbCode = data && (data.error_code || (typeof data.code === "string" ? data.code : null));
+    throw new ApiError(message, { status: res.status, code: (err && err.code) || sbCode || `HTTP_${res.status}`, hint: (err && err.hint) || (data && (data.msg || data.error_description || data.message)) || null, fields: err && err.fields, retryAfter });
   }
   return data;
 }
@@ -82,19 +83,23 @@ async function rest(path, { method = "GET", body, prefer } = {}) {
 
 export const db = {
   // Every insert is an allow-listed set of numbers and labels. Never record text.
-  insertRun: (r) => rest("audit_runs", { method: "POST", prefer: "return=representation", body: [{
-    model_label: r.model.label.slice(0, 120), source: r.source,
-    records_count: r.counts.candidates, canaries_count: r.counts.canaries, holdout_count: r.counts.holdout,
-    risk_score: r.risk.score, risk_band: r.risk.band, ci_low: r.risk.ci[0], ci_high: r.risk.ci[1],
-    tpr: r.calibration.tprCanaries, fpr: r.calibration.fpr, auc: Number.isFinite(r.calibration.auc) ? r.calibration.auc : null,
-    duration_ms: r.durationMs,
-  }] }),
+  insertRun: (r) => rest("audit_runs", {
+    method: "POST", prefer: "return=representation", body: [{
+      model_label: r.model.label.slice(0, 120), source: r.source,
+      records_count: r.counts.candidates, canaries_count: r.counts.canaries, holdout_count: r.counts.holdout,
+      risk_score: r.risk.score, risk_band: r.risk.band, ci_low: r.risk.ci[0], ci_high: r.risk.ci[1],
+      tpr: r.calibration.tprCanaries, fpr: r.calibration.fpr, auc: Number.isFinite(r.calibration.auc) ? r.calibration.auc : null,
+      duration_ms: r.durationMs,
+    }]
+  }),
   insertReceipt: (row) => rest("receipts", { method: "POST", prefer: "return=minimal", body: [row] }),
-  insertGarak: (g) => rest("garak_imports", { method: "POST", prefer: "return=minimal", body: [{
-    garak_version: g.garakVersion, probes_total: g.probesTotal, probes_with_hits: g.probesWithHits,
-    summary: g.rows.slice(0, 200).map((x) => ({ probe: x.probe, detector: x.detector, passed: x.passed, total: x.total })),
-  }] }),
-  logEvent: (action) => rest("audit_log", { method: "POST", prefer: "return=minimal", body: [{ action }] }).catch(() => {}),
+  insertGarak: (g) => rest("garak_imports", {
+    method: "POST", prefer: "return=minimal", body: [{
+      garak_version: g.garakVersion, probes_total: g.probesTotal, probes_with_hits: g.probesWithHits,
+      summary: g.rows.slice(0, 200).map((x) => ({ probe: x.probe, detector: x.detector, passed: x.passed, total: x.total })),
+    }]
+  }),
+  logEvent: (action) => rest("audit_log", { method: "POST", prefer: "return=minimal", body: [{ action }] }).catch(() => { }),
   listRuns: () => rest("audit_runs?select=*&order=created_at.desc&limit=50"),
   listReceipts: () => rest("receipts?select=id,audit_run_id,report_sha256,issued_at,signature&order=issued_at.desc&limit=50"),
   listGarak: () => rest("garak_imports?select=id,garak_version,probes_total,probes_with_hits,created_at&order=created_at.desc&limit=20"),
