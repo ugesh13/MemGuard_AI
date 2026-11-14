@@ -10,7 +10,7 @@ import { runDemoLab, analyzeScores } from "../engine/audit.js";
 import { DEMO_SPEC, MODEL_RECIPES } from "../engine/dataset.js";
 import { pageHead, errorBox } from "../ui/components.js";
 
-const MAX_SCORES_BYTES = 25 * 1024 * 1024;
+const MAX_SCORES_BYTES = 100 * 1024 * 1024;
 const STEPS = [
   ["training", "Train reference and fine-tuned models"],
   ["scoring", "Score every record against both models"],
@@ -154,8 +154,8 @@ export default function auditView(main) {
       <div class="grid g-12">
         <section class="card span-7" aria-labelledby="imp-h">
           <div class="card-head"><div><h2 id="imp-h">Import engine results</h2><p class="small muted mt-1">Your fine-tuned model and your records never leave your machine. The MemGuard engine computes the token scores locally; this page turns them into the evidence report, still inside your browser.</p></div></div>
-          <label class="dropzone" for="scores-file" id="sdrop">${icon("upload", "icon-lg")}<b>Drop <span class="mono">memguard-scores.json</span> here, or choose a file</b><span class="small muted">Format memguard-scores/v1 · max 25 MB</span>
-            <input type="file" id="scores-file" accept=".json,application/json" ${allowed ? "" : "disabled"} /></label>
+          <label class="dropzone" for="scores-file" id="sdrop">${icon("upload", "icon-lg")}<b>Drop your <span class="mono">memguard-scores</span> file here, or choose a file</b><span class="small muted">JSON, JSONL, or any format · max 100 MB</span>
+            <input type="file" id="scores-file" accept="*" ${allowed ? "" : "disabled"} /></label>
           <div id="imp-status" class="mt-3" aria-live="polite"></div>
         </section>
         <section class="card span-5" aria-labelledby="eng-h">
@@ -182,10 +182,28 @@ python memguard_engine.py \\
     const status = $("#imp-status", panel);
     const handle = async (file) => {
       if (!file) return;
-      if (file.size > MAX_SCORES_BYTES) { status.innerHTML = errorBox("That file is larger than 25 MB."); return; }
+      if (file.size > MAX_SCORES_BYTES) { status.innerHTML = errorBox("That file is larger than 100 MB."); return; }
       status.innerHTML = `<div class="stack-sm" aria-busy="true"><div class="skeleton"></div><div class="skeleton"></div></div>`;
       try {
-        const bundle = JSON.parse(await file.text());
+        const text = await file.text();
+        // Try parsing as JSON; if it fails, try JSONL (one object per line) and
+        // wrap it into the expected bundle shape so any export format is accepted.
+        let bundle;
+        try {
+          bundle = JSON.parse(text);
+        } catch {
+          // Not a single JSON document — attempt JSONL / newline-delimited JSON
+          const lines = text.split(/\r?\n/).filter((l) => l.trim());
+          if (!lines.length) throw new Error("The file is empty or contains no readable data.");
+          const parsed = [];
+          for (let i = 0; i < lines.length; i++) {
+            try { parsed.push(JSON.parse(lines[i])); } catch {
+              throw new Error(`Line ${i + 1} could not be parsed as JSON. Make sure the file was written by memguard_engine.py.`);
+            }
+          }
+          // If JSONL has a single object per line, wrap into an array bundle
+          bundle = parsed.length === 1 ? parsed[0] : parsed;
+        }
         bundle.source = "engine_import";
         const result = analyzeScores(bundle);
         addRun(result);
@@ -193,7 +211,7 @@ python memguard_engine.py \\
         toast(`Imported: risk ${result.risk.score} (${result.risk.band}).`, "ok");
         navigate("/report");
       } catch (err) {
-        status.innerHTML = errorBox(err instanceof SyntaxError ? "This file is not valid JSON." : err.message, { hint: "Use the file written by memguard_engine.py." });
+        status.innerHTML = errorBox(err.message || "Could not read the file.", { hint: "Use the file written by memguard_engine.py. JSON and JSONL formats are both accepted." });
       }
     };
     f.addEventListener("change", () => { const x = f.files[0]; f.value = ""; handle(x); });
