@@ -40,7 +40,7 @@ export default function bridgeView(main) {
         <label class="dropzone" id="drop" for="report-file">
           ${icon("upload", "icon-lg")}
           <b>Drop garak's <span class="mono">*.report.jsonl</span> here, or choose a file</b>
-          <span class="small muted">Max 5 MB</span>
+          <span class="small muted">Max 100 MB</span>
           <input type="file" id="report-file" accept=".jsonl,.json,application/json,text/plain" ${can("garak.import") ? "" : "disabled"} />
         </label>
         <div class="row mt-3"><button class="btn btn-secondary btn-sm" type="button" id="sample-btn">${icon("file", "icon-sm")} Load sample report</button><span class="small faint">A labelled sample in garak's format, for the demo.</span></div>
@@ -148,7 +148,7 @@ export default function bridgeView(main) {
     const f = file.files[0];
     file.value = "";
     if (!f) return;
-    if (f.size > MAX_REPORT_BYTES) { out.innerHTML = errorBox("The report is larger than 5 MB.", { hint: "Upload only the *.report.jsonl file." }); return; }
+    if (f.size > MAX_REPORT_BYTES) { out.innerHTML = errorBox("The report is larger than 100 MB.", { hint: "Upload only the *.report.jsonl file." }); return; }
     out.innerHTML = `<div class="stack-sm" aria-busy="true"><div class="skeleton"></div><div class="skeleton"></div></div>`;
     importText(await f.text());
   });
@@ -159,7 +159,7 @@ export default function bridgeView(main) {
     e.preventDefault(); drop.classList.remove("drag");
     const f = e.dataTransfer.files[0];
     if (!f) return;
-    if (f.size > MAX_REPORT_BYTES) { out.innerHTML = errorBox("The report is larger than 5 MB."); return; }
+    if (f.size > MAX_REPORT_BYTES) { out.innerHTML = errorBox("The report is larger than 100 MB."); return; }
     importText(await f.text());
   });
   $("#sample-btn", main).addEventListener("click", async () => {
