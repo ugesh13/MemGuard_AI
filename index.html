@@ -5,16 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>MemGuard AI: memorization leak auditor (run garak first, then close the gaps)</title>
   <meta name="description" content="MemGuard AI checks whether a fine-tuned LLM memorized your private records, blocks those leaks at runtime and proves a fix worked. It picks up where a garak scan stops. Nothing you upload is stored." />
-  <meta name="theme-color" content="#E8E4DB" />
+  <meta name="theme-color" content="#04070A" />
   <meta name="referrer" content="no-referrer" />
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
   <link rel="preload" href="/assets/fonts/Inter-Regular.woff" as="font" type="font/woff" crossorigin />
   <link rel="preload" href="/assets/fonts/Inter-SemiBold.woff" as="font" type="font/woff" crossorigin />
   <link rel="stylesheet" href="/assets/css/app.css" />
+  <link rel="stylesheet" href="/assets/css/theme-cyber.css" />
   <script type="module" src="/assets/js/app.js"></script>
+  <script src="/assets/js/status.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  <div class="st" aria-hidden="true"><div class="st-in"><span><i class="st-dot"></i><b id="st-api">CHECKING API</b><span id="st-ms" class="st-ms"></span></span><span class="st-hide">Engine: in-browser &middot; records never leave this tab</span><span class="st-warn st-hide">Evidence, not a certificate</span><span id="st-clock">UTC --:--:--</span></div></div>
   <div id="app" class="shell">
     <div class="auth" aria-busy="true"><div class="auth-card"><div class="skeleton w-full"></div><div class="skeleton w-full"></div></div></div>
   </div>
